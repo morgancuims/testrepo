@@ -1,0 +1,211 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>0225A</title>
+    <h1>Work Hour Performance Report - Key Project Drivers (Weekly)</h1>
+    <h2>Work Package earned value performance over the week</h2>
+
+    <style>
+        table, th, td {
+          border: 1px solid black;
+          border-collapse: collapse;
+        }
+        th, td {
+          padding: 12px;
+        }
+    </style>
+</head>
+
+
+<body>
+    <table>
+        <col>
+        <colgroup span="4"></colgroup>
+        <tr>
+          <th colspan="5" scope="colgroup"> </th>
+          <th colspan="5" scope="colgroup">Period (Weekly)</th>
+          <th colspan="4" scope="colgroup">Culmulative (Life-to-Date)</th>
+          <th colspan="5" scope="colgroup">At Completion</th>
+        </tr>
+
+        <tr>
+            <th colspan="5" scope="colgroup"> </th>
+            <th scope="col">a</th>
+            <th scope="col">c</th>
+            <th scope="col">d</th>
+            <th scope="col">e = d - a</th>
+            <th scope="col">f = d/a</th>
+            <th scope="col">g</th>
+            <th scope="col">h</th>
+            <th scope="col">i = g - h</th>
+            <th scope="col">j = h/g</th>
+            <th scope="col">k</th>
+            <th scope="col">l</th>
+            <th scope="col">m</th>
+            <th scope="col">n = k - h</th>
+            <th scope="col">p</th>
+        </tr>
+
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Program</th>
+          <th scope="col">Bundle</th>
+          <th scope="col">Vender (MPL)</th>
+          <th scope="col">Description</th>
+          <th scope="col">Plan (PV)</th>
+          <th scope="col">Level 3 Forecast</th>
+          <th scope="col">Earned (EV)</th>
+          <th scope="col">Variance From Plan</th>
+          <th scope="col">SPI</th>
+          <th scope="col">Plan (PV)</th>
+          <th scope="col">Earned (EV)</th>
+          <th scope="col">Variance From Plan</th>
+          <th scope="col">SPI</th>
+          <th scope="col">Plan (PV)</th>
+          <th scope="col">EAC Forecast</th>
+          <th scope="col">L3 Forecast</th>
+          <th scope="col">Remain. Left To Earn</th>
+          <th scope="col">To Earn</th>
+        </tr>
+    </table>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.js"></script>
+    <script>
+        function arrayToTable(tableData) {
+            var table = $('<table></table>');
+            $(tableData).each(function (i, rowData) {
+                var row = $('<tr></tr>');
+                $(rowData).each(function (j, cellData) {
+                    row.append($('<td>'+cellData+'</td>'));
+                });
+                table.append(row);
+            });
+            return table;
+        }
+    
+
+       $.ajax({
+            type: "GET",
+            url: "data.csv",
+            dataType: "text",
+
+            success: function (data) {
+                 var data = $('body').append(arrayToTable(Papa.parse(data).data));
+
+                // $.csv.toArrays(data); 
+			    
+                /* Variables for Table */
+                var pjList = [];
+			    var tbText = "";
+			    var projName = "";
+                var program = "";
+                var Bundle = "";
+                var Description = "";
+                //Period
+                var pPlanAll = 0;
+                var pForecastAll = 0;
+                var pEarnedAll = 0;
+                var pVfPAll = 0; //variance from plan
+                var pSPIAll = 0;
+                //Culmulative
+                var cPlanAll = 0;
+                var cEarnedAll = 0;
+                var cVfPAll = 0;
+                var cSPIAll = 0;
+                //At Completion
+                var atPlanAll = 0;
+                var atEACForecastAll = 0;
+                var atL3ForecastAll = 0;
+                var atRLtEAll = 0; //Remain Left to Earn
+                var atToEarnAll = 0;
+
+                var weekPV = [];
+                var weekFC = [];
+                var weekEV = [];
+                var weekFC3 = [];
+
+                var ltdPV = [];
+                var ltdFC = [];
+                var ltdEV = [];
+                var lcPV = [];
+                var lcFC = [];
+                var lcEV = [];
+			
+                pPlanAll += weekPV;
+
+                var ds = []; //trimmed Dataset
+			    for (var x=1; x<data.length; x++){
+			        if(data[x][0] == input){
+				        project = parseInt(data[x][0]);
+					    if(val.indexOf(project) != -1 && intArr.indexOf(parseInt(data[x][10])) != -1){
+					        ds.push(data[x]);
+				        }
+			        }
+                }
+                
+
+                for (var c=1; c<ds.length; c++){
+				    project = parseInt(ds[c][0]); 
+                    bundle = ds[c][1];
+                    program = ds[c][2];
+				    projName = ds[c][3];
+				    pjNames.push(ds[c][3]);
+                    vendor = ds[c][4];
+
+                    weekPV = parseInt(ds[c][8]);//Period Plan
+                    weekFC = parseInt(ds[c][9]);
+                    weekEV = parseInt(ds[c][10]);
+                    weekFC3 = parseInt(ds[c][11]);
+
+                    ltdPV = parseInt(ds[c][12]);//Cumulative Plan
+                    ltdFC = parseInt(ds[c][13]);
+                    ltdEV = parseInt(ds[c][14]);
+                    lcPV = parseInt(ds[c][15]);
+                    lcFC = parseInt(ds[c][16]);
+                    lcEV = parseInt(ds[c][17]);
+
+                    pVfP = pEarned - pPlan; //Earned - Plan????
+                    pSPI = pEarned / pPlan; // Earned/Plan??????
+
+                //part 3 Cumulative LTD
+
+                    cVfP = cPlan - cEarned; //Plan - Earned??????
+                    cSPI = cEarned / cPlan; //Earned / Plan???
+
+                //part 4 at completion
+                    atRLtE = cPlan - cEarned; //cPlan - cEarned
+                    // atToEarn =  // forgot the formula?????  
+                }   
+
+
+                /* TABLE CONTENTS */
+			    for (var i = 0; i < pcValues.length; i++){
+				    tbText += '<tr class="Contents">';
+					tbText += '<td class="Val">' + d3.format("(,d")(pPlanAll) + '</td>';
+
+				
+					
+                }
+
+
+
+
+
+
+
+
+            }
+
+
+    
+        });
+
+
+
+
+
+    </script>
+</body>	
+</html>
